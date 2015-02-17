@@ -8,13 +8,14 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     struct PhysicsCategory {
         static let None: UInt32 = 0
         static let Cat: UInt32 = 0b1        // 1
         static let Block: UInt32 = 0b10     // 2
         static let Bed: UInt32 = 0b100      // 4
+        static let Edge: UInt32 = 0b1000    // 8
     }
     
     var bedNode: SKSpriteNode!
@@ -28,6 +29,10 @@ class GameScene: SKScene {
         let playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height - playableMargin*2)
         
         physicsBody = SKPhysicsBody(edgeLoopFromRect: playableRect)
+        physicsBody!.categoryBitMask = PhysicsCategory.Edge
+        
+        // set contact delegate of physics world
+        physicsWorld.contactDelegate = self
         
         bedNode = childNodeWithName("bed") as SKSpriteNode
         catNode = childNodeWithName("cat") as SKSpriteNode
@@ -49,7 +54,20 @@ class GameScene: SKScene {
         
         // set category bitmask and collision bitmask for cat node
         catNode.physicsBody!.categoryBitMask = PhysicsCategory.Cat
-        catNode.physicsBody!.collisionBitMask = PhysicsCategory.Block
+        catNode.physicsBody!.collisionBitMask = PhysicsCategory.Block | PhysicsCategory.Edge
+        
+        // set contact bitmask for cat
+        catNode.physicsBody!.contactTestBitMask = PhysicsCategory.Bed | PhysicsCategory.Edge
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        let collision: UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
+        if collision == PhysicsCategory.Cat | PhysicsCategory.Bed {
+            println("SUCCESS")
+        } else if collision == PhysicsCategory.Cat | PhysicsCategory.Edge {
+            println("FAIL")
+        }
     }
     
     func sceneTouched(location: CGPoint) {
