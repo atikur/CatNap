@@ -21,5 +21,17 @@ class GameScene: SKScene {
         let playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height - playableMargin*2)
         
         physicsBody = SKPhysicsBody(edgeLoopFromRect: playableRect)
+        
+        bedNode = childNodeWithName("bed") as SKSpriteNode
+        catNode = childNodeWithName("cat") as SKSpriteNode
+        
+        // create physics body for bed node
+        let bedBodySize = CGSize(width: 40, height: 30)
+        bedNode.physicsBody = SKPhysicsBody(rectangleOfSize: bedBodySize)
+        bedNode.physicsBody!.dynamic = false
+        
+        // create physics body for cat
+        let catBodyTexture = SKTexture(imageNamed: "cat_body")
+        catNode.physicsBody = SKPhysicsBody(texture: catBodyTexture, size: catNode.size)
     }
 }
