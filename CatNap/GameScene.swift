@@ -68,6 +68,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             win()
         } else if collision == PhysicsCategory.Cat | PhysicsCategory.Edge {
             lose()
+        } else if collision == PhysicsCategory.Edge | PhysicsCategory.Label {
+            var labelNode: SKNode
+            if contact.bodyA.categoryBitMask == PhysicsCategory.Label {
+                labelNode = contact.bodyA.node!
+            } else {
+                labelNode = contact.bodyB.node!
+            }
+            
+            if labelNode.userData == nil {
+                labelNode.userData = NSMutableDictionary(object: 1 as Int, forKey: "bounceCount")
+            } else {
+                let bounceCount = labelNode.userData!.valueForKey("bounceCount") as Int + 1
+                if bounceCount == 4 {
+                    labelNode.runAction(SKAction.removeFromParent())
+                }
+                labelNode.userData?.setValue(bounceCount, forKey: "bounceCount")
+            }
         }
     }
     
@@ -106,11 +123,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         label.physicsBody!.restitution = 0.7
         
         addChild(label)
-        
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(3),
-            SKAction.removeFromParent()
-            ]))
     }
     
     func newGame() {
