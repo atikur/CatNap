@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Block: UInt32 = 0b10     // 2
         static let Bed: UInt32 = 0b100      // 4
         static let Edge: UInt32 = 0b1000    // 8
+        static let Label: UInt32 = 0b10000  // 16
     }
     
     var bedNode: SKSpriteNode!
@@ -66,7 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if collision == PhysicsCategory.Cat | PhysicsCategory.Bed {
             println("SUCCESS")
         } else if collision == PhysicsCategory.Cat | PhysicsCategory.Edge {
-            println("FAIL")
+            lose()
         }
     }
     
@@ -87,5 +88,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         let touch: UITouch = touches.anyObject() as UITouch
         sceneTouched(touch.locationInNode(self))
+    }
+    
+    func inGameMessage(text: String) {
+        let label: SKLabelNode = SKLabelNode(fontNamed: "AvenirNext-Regular")
+        label.text = text
+        label.fontSize = 128.0
+        label.color = SKColor.whiteColor()
+        
+        label.position = CGPoint(x: frame.size.width/2,
+                                 y: frame.size.height/2)
+        
+        label.physicsBody = SKPhysicsBody(circleOfRadius: 10)
+        label.physicsBody!.collisionBitMask = PhysicsCategory.Edge
+        label.physicsBody!.categoryBitMask = PhysicsCategory.Label
+        label.physicsBody!.contactTestBitMask = PhysicsCategory.Edge
+        label.physicsBody!.restitution = 0.7
+        
+        addChild(label)
+        
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(3),
+            SKAction.removeFromParent()
+            ]))
+    }
+    
+    func newGame() {
+        let scene = GameScene(fileNamed: "GameScene")
+        scene.scaleMode = .AspectFill
+        view!.presentScene(scene)
+    }
+    
+    func lose() {
+        catNode.physicsBody!.contactTestBitMask = PhysicsCategory.None
+        catNode.texture = SKTexture(imageNamed: "cat_awake")
+        
+        SKTAudio.sharedInstance().pauseBackgroundMusic()
+        runAction(SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false))
+        inGameMessage("Try again...")
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(5),
+            SKAction.runBlock(newGame)
+            ]))
     }
 }
