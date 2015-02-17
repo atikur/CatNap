@@ -51,4 +51,23 @@ class GameScene: SKScene {
         catNode.physicsBody!.categoryBitMask = PhysicsCategory.Cat
         catNode.physicsBody!.collisionBitMask = PhysicsCategory.Block
     }
+    
+    func sceneTouched(location: CGPoint) {
+        let targetNode = self.nodeAtPoint(location)
+        
+        if targetNode.physicsBody == nil {
+            return
+        }
+        
+        if targetNode.physicsBody!.categoryBitMask == PhysicsCategory.Block {
+            targetNode.removeFromParent()
+            runAction(SKAction.playSoundFileNamed("pop.mp3", waitForCompletion: false))
+            return
+        }
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        let touch: UITouch = touches.anyObject() as UITouch
+        sceneTouched(touch.locationInNode(self))
+    }
 }
