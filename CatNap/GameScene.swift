@@ -10,6 +10,13 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    struct PhysicsCategory {
+        static let None: UInt32 = 0
+        static let Cat: UInt32 = 0b1        // 1
+        static let Block: UInt32 = 0b10     // 2
+        static let Bed: UInt32 = 0b100      // 4
+    }
+    
     var bedNode: SKSpriteNode!
     var catNode: SKSpriteNode!
     
@@ -35,5 +42,13 @@ class GameScene: SKScene {
         catNode.physicsBody = SKPhysicsBody(texture: catBodyTexture, size: catNode.size)
         
         SKTAudio.sharedInstance().playBackgroundMusic("backgroundMusic.mp3")
+        
+        // set category bitmask and collision bitmask for bed node
+        bedNode.physicsBody!.categoryBitMask = PhysicsCategory.Bed
+        bedNode.physicsBody!.collisionBitMask = PhysicsCategory.None
+        
+        // set category bitmask and collision bitmask for cat node
+        catNode.physicsBody!.categoryBitMask = PhysicsCategory.Cat
+        catNode.physicsBody!.collisionBitMask = PhysicsCategory.Block
     }
 }
