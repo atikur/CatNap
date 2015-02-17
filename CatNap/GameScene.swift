@@ -33,5 +33,7 @@ class GameScene: SKScene {
         // create physics body for cat
         let catBodyTexture = SKTexture(imageNamed: "cat_body")
         catNode.physicsBody = SKPhysicsBody(texture: catBodyTexture, size: catNode.size)
+        
+        SKTAudio.sharedInstance().playBackgroundMusic("backgroundMusic.mp3")
     }
 }
