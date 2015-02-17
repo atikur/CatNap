@@ -65,7 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let collision: UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if collision == PhysicsCategory.Cat | PhysicsCategory.Bed {
-            println("SUCCESS")
+            win()
         } else if collision == PhysicsCategory.Cat | PhysicsCategory.Edge {
             lose()
         }
@@ -130,5 +130,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             SKAction.waitForDuration(5),
             SKAction.runBlock(newGame)
             ]))
+    }
+    
+    func win() {
+        catNode.physicsBody = nil
+        
+        let curlY = bedNode.position.y + catNode.size.height/3
+        let curlPoint = CGPoint(x: bedNode.position.x, y: curlY)
+        
+        catNode.runAction(SKAction.group([
+            SKAction.moveTo(curlPoint, duration: 0.66),
+            SKAction.rotateToAngle(0, duration: 0.5)
+            ]))
+        
+        inGameMessage("Nice job!")
+        
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(5),
+            SKAction.runBlock(newGame)
+            ]))
+        
+        catNode.runAction(SKAction.animateWithTextures([
+            SKTexture(imageNamed: "cat_curlup1"),
+            SKTexture(imageNamed: "cat_curlup2"),
+            SKTexture(imageNamed: "cat_curlup3")
+            ], timePerFrame: 0.25))
+        
+        SKTAudio.sharedInstance().pauseBackgroundMusic()
+        runAction(SKAction.playSoundFileNamed("win.mp3", waitForCompletion: false))
     }
 }
