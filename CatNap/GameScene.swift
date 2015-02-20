@@ -171,4 +171,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         SKTAudio.sharedInstance().pauseBackgroundMusic()
         runAction(SKAction.playSoundFileNamed("win.mp3", waitForCompletion: false))
     }
+    
+    override func didSimulatePhysics() {
+        if let body = catNode.physicsBody {
+            if body.contactTestBitMask != PhysicsCategory.None && fabs(catNode.zRotation) > CGFloat(45).degreesToRadians() {
+                lose()
+            }
+        }
+    }
 }
