@@ -103,6 +103,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 labelNode.userData?.setValue(bounceCount, forKey: "bounceCount")
             }
         }
+        
+        if collision == PhysicsCategory.Cat | PhysicsCategory.Hook {
+            catNode.physicsBody!.velocity = CGVector(dx: 0, dy: 0)
+            catNode.physicsBody!.angularVelocity = 0
+            
+            let pinPoint = CGPoint(
+                x: hookNode.position.x,
+                y: hookNode.position.y + hookNode.size.height/2)
+            
+            hookJoint = SKPhysicsJointFixed.jointWithBodyA(contact.bodyA, bodyB: contact.bodyB, anchor: pinPoint)
+            physicsWorld.addJoint(hookJoint)
+        }
     }
     
     func sceneTouched(location: CGPoint) {
@@ -129,6 +141,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 SKAction.removeFromParent()
                 ]))
             return
+        }
+        
+        // release cat from hook
+        if targetNode.physicsBody?.categoryBitMask == PhysicsCategory.Cat && hookJoint != nil {
+            releaseHook()
         }
     }
     
@@ -203,7 +220,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didSimulatePhysics() {
         if let body = catNode.physicsBody {
             if body.contactTestBitMask != PhysicsCategory.None && fabs(catNode.zRotation) > CGFloat(45).degreesToRadians() {
-                lose()
+                if hookJoint == nil {
+                    lose()
+                }
             }
         }
     }
@@ -246,5 +265,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ropeNode.constraints = [orientConstraint]
         
         hookNode.physicsBody!.applyImpulse(CGVector(dx: 50, dy: 0))
+    }
+    
+    func releaseHook() {
+        catNode.zRotation = 0
+        hookNode.physicsBody!.contactTestBitMask = PhysicsCategory.None
+        physicsWorld.removeJoint(hookJoint)
+        hookJoint = nil
     }
 }
