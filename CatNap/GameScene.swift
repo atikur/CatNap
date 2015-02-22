@@ -76,6 +76,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         catNode.physicsBody!.contactTestBitMask = PhysicsCategory.Bed | PhysicsCategory.Edge
         
         addHook()
+        
+        makeCompundNode()
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -119,6 +121,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func sceneTouched(location: CGPoint) {
         let targetNode = self.nodeAtPoint(location)
+        
+        if targetNode.parent?.name == "compoundNode" {
+            targetNode.parent!.removeFromParent()
+        }
         
         if targetNode.physicsBody == nil {
             return
@@ -272,5 +278,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hookNode.physicsBody!.contactTestBitMask = PhysicsCategory.None
         physicsWorld.removeJoint(hookJoint)
         hookJoint = nil
+    }
+    
+    func makeCompundNode() {
+        let compundNode = SKNode()
+        compundNode.zPosition = -1
+        compundNode.name = "compoundNode"
+        
+        var bodies: [SKPhysicsBody] = [SKPhysicsBody]()
+        
+        enumerateChildNodesWithName("stone", usingBlock: {
+            node, _ in
+            node.removeFromParent()
+            compundNode.addChild(node)
+            
+            let body = SKPhysicsBody(rectangleOfSize: node.frame.size, center: node.position)
+            bodies.append(body)
+        })
+        
+        compundNode.physicsBody = SKPhysicsBody(bodies: bodies)
+        
+        compundNode.physicsBody!.collisionBitMask = PhysicsCategory.Edge | PhysicsCategory.Cat | PhysicsCategory.Block
+        addChild(compundNode)
     }
 }

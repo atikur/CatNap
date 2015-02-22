@@ -63,6 +63,7 @@
 		47506C581A93052200B069E5 /* SKTEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47506C4C1A93052200B069E5 /* SKTEffects.swift */; };
 		47506C591A93052200B069E5 /* SKTTimingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47506C4D1A93052200B069E5 /* SKTTimingFunctions.swift */; };
 		47506C5A1A93052200B069E5 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47506C4E1A93052200B069E5 /* Vector3.swift */; };
+		4768117D1A99C17500417F4E /* Level3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4768117C1A99C17500417F4E /* Level3.sks */; };
 		478E966E1A97A86400D0CE97 /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 478E966D1A97A86400D0CE97 /* Level2.sks */; };
 /* End PBXBuildFile section */
 
@@ -137,6 +138,7 @@
 		47506C4C1A93052200B069E5 /* SKTEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTEffects.swift; sourceTree = "<group>"; };
 		47506C4D1A93052200B069E5 /* SKTTimingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTTimingFunctions.swift; sourceTree = "<group>"; };
 		47506C4E1A93052200B069E5 /* Vector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
+		4768117C1A99C17500417F4E /* Level3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level3.sks; sourceTree = "<group>"; };
 		478E966D1A97A86400D0CE97 /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +186,7 @@
 				47506BCE1A92ED7700B069E5 /* AppDelegate.swift */,
 				47506BD01A92ED7700B069E5 /* Level1.sks */,
 				478E966D1A97A86400D0CE97 /* Level2.sks */,
+				4768117C1A99C17500417F4E /* Level3.sks */,
 				47506BD21A92ED7700B069E5 /* GameScene.swift */,
 				47506BD41A92ED7700B069E5 /* GameViewController.swift */,
 				47506BD61A92ED7700B069E5 /* Main.storyboard */,
@@ -435,6 +438,7 @@
 				478E966E1A97A86400D0CE97 /* Level2.sks in Resources */,
 				47506C231A92EECA00B069E5 /* Icon40@3x.png in Resources */,
 				47506C2D1A92EECA00B069E5 /* Icon76@2x.png in Resources */,
+				4768117D1A99C17500417F4E /* Level3.sks in Resources */,
 				47506C3E1A92EECA00B069E5 /* win.mp3 in Resources */,
 				47506C301A92EECA00B069E5 /* Icon1024.png in Resources */,
 				47506BDD1A92ED7700B069E5 /* LaunchScreen.xib in Resources */,
