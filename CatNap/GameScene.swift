@@ -183,6 +183,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func lose() {
+        if currentLevel > 1 {
+            currentLevel--
+        }
+        
         catNode.physicsBody!.contactTestBitMask = PhysicsCategory.None
         catNode.texture = SKTexture(imageNamed: "cat_awake")
         
@@ -196,6 +200,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func win() {
+        if currentLevel < 3 {
+            currentLevel++
+        }
+        
         catNode.physicsBody = nil
         
         let curlY = bedNode.position.y + catNode.size.height/3
